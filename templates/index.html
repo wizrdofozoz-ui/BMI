@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI 계산기</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            width: 380px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus { border-color: #2c3e50; }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.85; }
+
+        .btn-calc { background: #2c3e50; color: white; }
+        .btn-reset { background: #bdc3c7; color: white; }
+
+        .result {
+            margin-top: 24px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .result-item span {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .result-item strong {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .error {
+            margin-top: 16px;
+            background: #fdecea;
+            color: #c0392b;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+
+        .guide {
+            margin-top: 20px;
+            font-size: 11px;
+            color: #aaa;
+            text-align: center;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>BMI 계산기</h1>
+
+        <form method="POST">
+            <div class="form-group">
+                <label>키 (cm)</label>
+                <input type="number" name="height" step="0.1" placeholder="예: 170"
+                       value="{{ request.form.get('height', '') }}" required>
+            </div>
+            <div class="form-group">
+                <label>몸무게 (kg)</label>
+                <input type="number" name="weight" step="0.1" placeholder="예: 65"
+                       value="{{ request.form.get('weight', '') }}" required>
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn-calc">계산하기</button>
+                <button type="button" class="btn-reset" onclick="location.href='/'">초기화</button>
+            </div>
+        </form>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if result %}
+        <div class="result">
+            <div class="result-item">
+                <span>BMI 수치</span>
+                <strong style="color: {{ result.color }}">{{ result.bmi }}</strong>
+            </div>
+            <div class="result-item">
+                <span>판정</span>
+                <strong style="color: {{ result.color }}">{{ result.category }}</strong>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="guide">
+            [ BMI 판정 기준 ]<br>
+            저체중: 18.5 미만 &nbsp;|&nbsp; 정상: 18.5 ~ 22.9<br>
+            과체중: 23.0 ~ 24.9 &nbsp;|&nbsp; 비만: 25.0 이상
+        </div>
+    </div>
+</body>
+</html>
